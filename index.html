@@ -3,988 +3,711 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mobile Legends Quiz - Lumayan Sulit</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<title>SUS Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --green: #58CC02;
+    --green-dark: #46A302;
+    --green-shadow: #3A8501;
+    --blue: #1CB0F6;
+    --blue-dark: #0A91CC;
+    --red: #FF4B4B;
+    --orange: #FF9600;
+    --yellow: #FFD900;
+    --purple: #CE82FF;
+    --gray-bg: #F7F7F7;
+    --gray-border: #E5E5E5;
+    --gray-text: #777;
+    --dark: #3C3C3C;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Exo 2', sans-serif;
-    background: #0a0e1a;
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--gray-bg);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(0, 80, 200, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 20, 20, 0.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(255, 200, 0, 0.05) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 680px;
     padding: 20px;
   }
 
-  .screen { display: none; }
-  .screen.active { display: block; }
-
-  .start-card, .result-card, .lb-card, .done-card {
-    background: linear-gradient(135deg, #0d1528 0%, #111b35 50%, #150d20 100%);
-    border: 1px solid rgba(255,200,0,0.3);
-    border-radius: 20px;
-    padding: 50px 40px;
-    text-align: center;
-    box-shadow: 0 0 60px rgba(255,200,0,0.08), 0 0 120px rgba(0,80,200,0.1);
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    border: 2px solid var(--gray-border);
+    box-shadow: 0 4px 0 var(--gray-border);
+    width: 100%;
+    max-width: 520px;
+    padding: 40px 36px;
+    animation: fadeUp .4s ease both;
   }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .fade-in { animation: fadeIn 0.4s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-  .logo-ring { width: 120px; height: 120px; margin: 0 auto 24px; position: relative; }
-  .logo-ring svg { width: 100%; height: 100%; }
-  .logo-ring-sm { width: 70px; height: 70px; margin: 0 auto 16px; }
-  .logo-ring-sm svg { width: 100%; height: 100%; }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: var(--green);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 0 var(--green-shadow);
+  }
+  .logo-icon svg { width: 28px; height: 28px; fill: #fff; }
+  .logo-text {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--green);
+    letter-spacing: -0.5px;
+  }
 
-  h1 {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #ffc800, #ff6b00, #ff2020);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1.1;
+  .mascot {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    animation: bounce 1s ease infinite alternate;
+  }
+  .mascot svg { width: 72px; height: 72px; }
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+  }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--dark);
+    text-align: center;
     margin-bottom: 8px;
   }
-
-  .subtitle {
-    font-size: 0.85rem;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: rgba(255,200,0,0.6);
-    margin-bottom: 32px;
+  .section-sub {
+    font-size: 14px;
+    color: var(--gray-text);
+    text-align: center;
+    margin-bottom: 28px;
   }
 
-  .difficulty-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #c00, #8b0000);
-    color: #ffcccc;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    padding: 6px 20px;
-    border-radius: 30px;
-    border: 1px solid rgba(255,80,80,0.4);
-    margin-bottom: 40px;
-  }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 36px;
-  }
-
-  .stat-box {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 16px 8px;
-  }
-
-  .stat-num {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #ffc800;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    margin-top: 2px;
-  }
-
-  .name-section { margin-bottom: 20px; text-align: left; }
-
-  .name-label {
+  .input-wrap { position: relative; margin-bottom: 20px; }
+  .input-wrap label {
     display: block;
-    font-size: 0.72rem;
-    letter-spacing: 3px;
+    font-weight: 700;
+    font-size: 13px;
     text-transform: uppercase;
-    color: rgba(255,200,0,0.7);
-    margin-bottom: 10px;
-    text-align: center;
+    letter-spacing: .6px;
+    color: var(--gray-text);
+    margin-bottom: 8px;
   }
-
-  .name-input {
+  .input-wrap input {
     width: 100%;
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,200,0,0.3);
-    border-radius: 12px;
-    padding: 15px 20px;
-    color: #fff;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 1.1rem;
+    padding: 14px 18px;
+    border: 2px solid var(--gray-border);
+    border-radius: 14px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
     font-weight: 600;
-    text-align: center;
+    color: var(--dark);
     outline: none;
-    transition: all 0.2s;
-    letter-spacing: 1px;
+    transition: border .2s, box-shadow .2s;
+    background: var(--white);
+  }
+  .input-wrap input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(28,176,246,.15);
+  }
+  .input-wrap input::placeholder { color: #bbb; font-weight: 400; }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    letter-spacing: .4px;
+    transition: transform .1s, box-shadow .1s, filter .15s;
+  }
+  .btn-green {
+    background: var(--green);
+    color: var(--white);
+    box-shadow: 0 4px 0 var(--green-shadow);
+  }
+  .btn-green:hover { filter: brightness(1.05); }
+  .btn-green:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--green-shadow); }
+  .btn-green:disabled { background: #ccc; box-shadow: 0 4px 0 #aaa; cursor: not-allowed; }
+
+  .btn-blue {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 0 4px 0 var(--blue-dark);
+  }
+  .btn-blue:hover { filter: brightness(1.05); }
+  .btn-blue:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--blue-dark); }
+
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-text);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  .progress-track {
+    height: 14px;
+    background: var(--gray-border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), #78E000);
+    border-radius: 99px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
   }
 
-  .name-input::placeholder { color: rgba(255,255,255,0.2); font-weight: 400; letter-spacing: 0; }
-  .name-input:focus { border-color: rgba(255,200,0,0.7); background: rgba(255,200,0,0.06); box-shadow: 0 0 20px rgba(255,200,0,0.1); }
+  .q-number {
+    display: inline-block;
+    background: var(--purple);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 12px;
+    padding: 3px 12px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+    letter-spacing: .5px;
+  }
+  .q-text {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--dark);
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
 
-  .btn-start, .btn-lb, .btn-home, .btn-reset {
-    display: block;
-    width: 100%;
-    padding: 18px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.3rem;
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .scale-labels span {
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 12px;
+    color: var(--gray-text);
+    max-width: 100px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .scale-labels span:last-child { text-align: right; }
+
+  .scale-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .scale-btn {
+    flex: 1;
+    aspect-ratio: 1;
+    border: 2px solid var(--gray-border);
+    border-radius: 14px;
+    background: var(--white);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--dark);
     cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+    transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 0;
+  }
+  .scale-btn:hover { border-color: var(--blue); background: rgba(28,176,246,.08); color: var(--blue); transform: translateY(-2px); }
+  .scale-btn.selected {
+    border-color: var(--green);
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 4px 0 var(--green-shadow);
+    transform: translateY(-2px);
+  }
+  .scale-btn[data-val="1"]:hover { border-color: var(--red); background: rgba(255,75,75,.08); color: var(--red); }
+  .scale-btn[data-val="2"]:hover { border-color: var(--orange); background: rgba(255,150,0,.08); color: var(--orange); }
+  .scale-btn[data-val="3"]:hover { border-color: var(--yellow); background: rgba(255,217,0,.08); color: #b89800; }
+  .scale-btn[data-val="4"]:hover { border-color: #78E000; background: rgba(120,224,0,.08); color: #5aaa00; }
+  .scale-btn[data-val="5"]:hover { border-color: var(--green); background: rgba(88,204,2,.08); color: var(--green-dark); }
+  .scale-btn[data-val="6"]:hover { border-color: var(--blue); background: rgba(28,176,246,.08); color: var(--blue); }
+  .scale-btn[data-val="7"]:hover { border-color: var(--purple); background: rgba(206,130,255,.08); color: var(--purple); }
+
+  .result-score { text-align: center; margin: 20px 0; }
+  .score-number {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 72px;
+    line-height: 1;
+  }
+  .score-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    margin-top: 8px;
+  }
+  .score-bar-wrap {
+    background: var(--gray-border);
+    border-radius: 99px;
+    height: 20px;
+    margin: 16px 0;
     overflow: hidden;
+  }
+  .score-bar {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .score-grade {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 99px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: .5px;
+    margin-bottom: 20px;
+  }
+
+  .answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .ans-item {
+    background: var(--gray-bg);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ans-num {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--purple);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ans-text { font-size: 12px; color: var(--gray-text); font-weight: 600; flex: 1; line-height: 1.3; }
+  .ans-val { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 18px; color: var(--dark); }
+
+  .divider { border: none; border-top: 2px solid var(--gray-border); margin: 24px 0; }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp .35s ease both; }
+
+  .streak-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .streak-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--gray-border);
+    transition: background .3s;
+  }
+  .streak-dot.done { background: var(--green); }
+  .streak-dot.active {
+    background: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(255,217,0,.3);
+    animation: pulse .8s ease infinite alternate;
+  }
+  @keyframes pulse { to { box-shadow: 0 0 0 6px rgba(255,217,0,.1); } }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .result-icon {
+    width: 52px; height: 52px;
+    background: var(--yellow);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 0 #c9aa00;
+  }
+  .result-icon svg { width: 28px; height: 28px; fill: #fff; }
+  .result-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--dark);
+  }
+
+  .summary-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: var(--dark);
     margin-bottom: 12px;
   }
-
-  .btn-start { background: linear-gradient(135deg, #1a4fc8, #0e2d80); color: #fff; border: 1px solid rgba(100,150,255,0.4); }
-  .btn-lb    { background: linear-gradient(135deg, #8b6914, #5a4008); color: #ffd860; border: 1px solid rgba(255,200,0,0.3); font-size: 1.1rem; }
-  .btn-home  { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.12); font-size: 1rem; letter-spacing: 3px; }
-  .btn-reset { background: rgba(255,40,40,0.08); color: #ff7070; border: 1px solid rgba(255,60,60,0.25); font-size: 0.9rem; letter-spacing: 3px; padding: 12px; }
-
-  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(26,79,200,0.5); }
-  .btn-lb:hover    { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,180,0,0.25); }
-  .btn-home:hover  { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
-  .btn-reset:hover { background: rgba(255,40,40,0.15); transform: translateY(-1px); }
-  .btn-start:active, .btn-lb:active, .btn-home:active, .btn-reset:active { transform: scale(0.98); }
-
-  .btn-start:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  /* Loading spinner */
-  .loading-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(10,14,26,0.85);
-    z-index: 999;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .loading-overlay.show { display: flex; }
-  .spinner {
-    width: 48px; height: 48px;
-    border: 4px solid rgba(255,200,0,0.2);
-    border-top-color: #ffc800;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-family: 'Rajdhani', sans-serif; font-size: 1rem; letter-spacing: 3px; color: rgba(255,200,0,0.7); text-transform: uppercase; }
-
-  /* Already played */
-  .lock-icon { font-size: 5rem; margin-bottom: 16px; }
-  .lock-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #ff6060; margin-bottom: 12px; }
-  .lock-msg { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 24px; }
-  .lock-score-box { background: rgba(255,200,0,0.08); border: 1px solid rgba(255,200,0,0.25); border-radius: 14px; padding: 20px; margin-bottom: 28px; }
-  .lock-score-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,200,0,0.55); margin-bottom: 6px; }
-  .lock-score-val { font-family: 'Rajdhani', sans-serif; font-size: 3.5rem; font-weight: 700; color: #ffc800; line-height: 1; }
-  .lock-score-sub { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
-
-  /* Quiz screen */
-  .player-name-display { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,200,0,0.55); text-align: center; margin-bottom: 12px; }
-  .player-name-display strong { color: #ffc800; }
-
-  .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .q-counter { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
-  .q-counter span { color: #ffc800; font-size: 1.3rem; }
-  .score-badge { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
-  .score-badge span { color: #4af; font-size: 1.3rem; }
-
-  .timer-wrap { margin-bottom: 20px; position: relative; }
-  .timer-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-  .timer-bar { height: 100%; border-radius: 4px; transition: width 1s linear, background 0.5s; background: linear-gradient(90deg, #ffc800, #ff6b00); width: 100%; }
-  .timer-bar.danger { background: linear-gradient(90deg, #ff4444, #cc0000); }
-  .timer-text { position: absolute; right: 0; top: -22px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; color: #ffc800; transition: color 0.3s; }
-  .timer-text.danger { color: #ff4444; }
-
-  .question-card { background: linear-gradient(135deg, #0d1528, #111b35); border: 1px solid rgba(100,150,255,0.2); border-radius: 16px; padding: 28px; margin-bottom: 16px; }
-
-  .q-role-tag { display: inline-block; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; font-weight: 600; }
-  .q-role-tag.hero     { background: rgba(255,100,0,0.15); color: #ff9040; border: 1px solid rgba(255,100,0,0.3); }
-  .q-role-tag.mechanic { background: rgba(0,150,255,0.15); color: #50b8ff; border: 1px solid rgba(0,150,255,0.3); }
-  .q-role-tag.lore     { background: rgba(200,50,200,0.15); color: #d070d0; border: 1px solid rgba(200,50,200,0.3); }
-  .q-role-tag.skill    { background: rgba(0,200,100,0.15); color: #40d880; border: 1px solid rgba(0,200,100,0.3); }
-
-  .question-text { font-size: 1.15rem; line-height: 1.6; color: #e8eaf6; font-weight: 600; }
-
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  .opt-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 14px; color: #ccd4e8; font-family: 'Exo 2', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: left; transition: all 0.18s; position: relative; overflow: hidden; }
-  .opt-btn:hover:not(:disabled) { background: rgba(26,79,200,0.2); border-color: rgba(100,150,255,0.5); color: #fff; transform: translateY(-1px); }
-  .opt-btn:active:not(:disabled) { transform: scale(0.98); }
-  .opt-btn.correct { background: rgba(0,180,80,0.2); border-color: #00b850; color: #40ff90; }
-  .opt-btn.wrong   { background: rgba(220,30,30,0.2); border-color: #dc1e1e; color: #ff7070; }
-  .opt-btn.reveal  { background: rgba(0,180,80,0.1); border-color: rgba(0,180,80,0.4); color: #40ff90; }
-  .opt-btn:disabled { cursor: default; }
-
-  .opt-letter { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,0.08); font-size: 0.7rem; margin-right: 8px; font-weight: 700; color: rgba(255,255,255,0.5); flex-shrink: 0; }
-  .opt-btn.correct .opt-letter { background: rgba(0,200,80,0.3); color: #40ff90; }
-  .opt-btn.wrong   .opt-letter { background: rgba(220,30,30,0.3); color: #ff7070; }
-  .opt-btn.reveal  .opt-letter { background: rgba(0,200,80,0.2); color: #40ff90; }
-
-  .explanation-box { background: rgba(255,200,0,0.06); border: 1px solid rgba(255,200,0,0.2); border-radius: 12px; padding: 14px 18px; margin-top: 14px; font-size: 0.85rem; color: rgba(255,220,100,0.9); line-height: 1.6; display: none; }
-  .explanation-box.show { display: block; }
-  .explanation-box strong { color: #ffc800; }
-
-  .progress-dots { display: flex; gap: 6px; justify-content: center; margin-top: 20px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); transition: all 0.3s; }
-  .dot.done-correct { background: #00b850; }
-  .dot.done-wrong   { background: #dc1e1e; }
-  .dot.active       { background: #ffc800; width: 20px; border-radius: 4px; }
-
-  /* Result */
-  .result-player-tag { font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,200,0,0.6); margin-bottom: 4px; }
-  .result-player-tag strong { color: #ffc800; }
-  .result-icon { font-size: 4rem; margin-bottom: 12px; }
-  .result-title { font-family: 'Rajdhani', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; }
-  .result-title.legend { background: linear-gradient(135deg, #ffc800, #ff6b00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .result-title.pro    { background: linear-gradient(135deg, #4af, #0af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .result-title.tryhard { color: #a0a8c0; }
-
-  .result-score-big { font-family: 'Rajdhani', sans-serif; font-size: 5rem; font-weight: 700; color: #ffc800; line-height: 1; margin: 20px 0 4px; }
-  .result-score-label { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 30px; }
-
-  .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
-  .r-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 8px; }
-  .r-stat-num { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700; }
-  .r-stat-num.green { color: #40ff90; }
-  .r-stat-num.red   { color: #ff7070; }
-  .r-stat-num.blue  { color: #4af; }
-  .r-stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 2px; }
-
-  .rank-display { background: rgba(255,200,0,0.08); border: 1px solid rgba(255,200,0,0.2); border-radius: 12px; padding: 16px; margin-bottom: 28px; font-size: 0.9rem; color: rgba(255,220,100,0.85); line-height: 1.5; }
-
-  /* Leaderboard */
-  .lb-section-title { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #ffc800; text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-
-  .section-divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,200,0,0.3), transparent); margin: 32px 0; }
-
-  .lb-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
-  .lb-table th { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 0 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .lb-table th:first-child { width: 40px; text-align: center; }
-  .lb-table th:last-child  { text-align: right; }
-  .lb-table th.col-correct { text-align: center; }
-
-  .lb-table td { padding: 11px 10px; font-size: 0.88rem; color: rgba(255,255,255,0.7); border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
-  .lb-table td:first-child { text-align: center; }
-  .lb-table td:last-child  { text-align: right; }
-  .lb-table td.col-correct { text-align: center; }
-
-  .lb-row-highlight { background: rgba(255,200,0,0.08) !important; }
-  .lb-row-highlight td { color: #ffd860 !important; }
-  .lb-row:hover { background: rgba(255,255,255,0.03); }
-
-  .rank-medal { font-size: 1.15rem; }
-  .rank-num { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.3); }
-  .rank-num.gold   { color: #ffc800; }
-  .rank-num.silver { color: #b0c0d0; }
-  .rank-num.bronze { color: #cd7f32; }
-
-  .lb-player-name { font-weight: 700; color: rgba(255,255,255,0.9); }
-  .lb-you-badge { display: inline-block; background: rgba(255,100,0,0.2); color: #ff9040; font-size: 0.58rem; letter-spacing: 2px; font-weight: 700; padding: 2px 6px; border-radius: 5px; border: 1px solid rgba(255,100,0,0.35); margin-left: 6px; text-transform: uppercase; vertical-align: middle; }
-
-  .lb-score-val { font-family: 'Rajdhani', sans-serif; font-size: 1.15rem; font-weight: 700; color: #4aaff0; }
-  .lb-score-val.rank1 { color: #ffc800; }
-  .lb-score-val.rank2 { color: #b0c0d0; }
-  .lb-score-val.rank3 { color: #cd7f32; }
-
-  .lb-correct-val { font-size: 0.85rem; color: rgba(100,255,160,0.75); font-weight: 600; }
-  .lb-date { font-size: 0.7rem; color: rgba(255,255,255,0.2); }
-  .lb-empty { text-align: center; padding: 36px 20px; color: rgba(255,255,255,0.2); font-size: 0.9rem; }
-
-  .onetime-notice { display: flex; align-items: center; gap: 10px; background: rgba(255,100,0,0.08); border: 1px solid rgba(255,100,0,0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 28px; font-size: 0.8rem; color: rgba(255,160,80,0.9); text-align: left; line-height: 1.5; }
-  .onetime-notice .notice-icon { font-size: 1.4rem; flex-shrink: 0; }
-
-  @keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(255,50,50,0.4); } 50% { box-shadow: 0 0 0 8px rgba(255,50,50,0); } }
-  .pulse-danger { animation: pulse-red 0.8s ease infinite; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-  .shake { animation: shake 0.3s ease; }
-
-  #result-screen .result-card { padding: 40px; }
-
-  /* Admin panel */
-  .admin-divider { width: 100%; height: 1px; background: rgba(255,60,60,0.15); margin: 20px 0 16px; }
-  .admin-label { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,80,80,0.3); text-align: center; margin-bottom: 10px; }
+  .summary-title svg { width: 18px; height: 18px; fill: var(--purple); flex-shrink: 0; }
 </style>
 </head>
 <body>
 
-<!-- Loading overlay -->
-<div class="loading-overlay" id="loading-overlay">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loading-text">Memuat...</div>
+<!-- SCREEN 1: LOGIN -->
+<div class="card screen active" id="screen-login">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1H4.5V5h15v14.1zm0-16.1H4.5C3.4 3 2.5 3.9 2.5 5v14.1C2.5 20.2 3.4 21 4.5 21h15c1.1 0 2-.8 2-1.9V5c0-1.1-.9-2-2-2z"/>
+      </svg>
+    </div>
+    <span class="logo-text">SurveySUS</span>
+  </div>
+
+  <div class="mascot">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <ellipse cx="50" cy="68" rx="30" ry="24" fill="#58CC02"/>
+      <!-- head -->
+      <ellipse cx="50" cy="38" rx="22" ry="20" fill="#78E000"/>
+      <!-- left ear -->
+      <ellipse cx="28" cy="28" rx="8" ry="12" fill="#46A302" transform="rotate(-15 28 28)"/>
+      <!-- right ear -->
+      <ellipse cx="72" cy="28" rx="8" ry="12" fill="#46A302" transform="rotate(15 72 28)"/>
+      <!-- left ear inner -->
+      <ellipse cx="28" cy="28" rx="4" ry="7" fill="#A0F040" transform="rotate(-15 28 28)"/>
+      <!-- right ear inner -->
+      <ellipse cx="72" cy="28" rx="4" ry="7" fill="#A0F040" transform="rotate(15 72 28)"/>
+      <!-- trunk -->
+      <path d="M38,54 Q28,62 30,74 Q31,80 36,78 Q40,76 38,70 Q36,62 44,58" fill="#46A302"/>
+      <!-- left eye -->
+      <circle cx="40" cy="34" r="6" fill="#fff"/>
+      <circle cx="40" cy="34" r="3.5" fill="#3C3C3C"/>
+      <circle cx="41.5" cy="32.5" r="1.5" fill="#fff"/>
+      <!-- right eye -->
+      <circle cx="60" cy="34" r="6" fill="#fff"/>
+      <circle cx="60" cy="34" r="3.5" fill="#3C3C3C"/>
+      <circle cx="61.5" cy="32.5" r="1.5" fill="#fff"/>
+      <!-- tusk left -->
+      <path d="M40,52 Q34,58 36,64" stroke="#FFD900" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- belly -->
+      <ellipse cx="52" cy="70" rx="16" ry="14" fill="#A0F040"/>
+      <!-- left front leg -->
+      <rect x="24" y="82" width="14" height="14" rx="6" fill="#46A302"/>
+      <!-- right front leg -->
+      <rect x="44" y="86" width="14" height="10" rx="6" fill="#46A302"/>
+      <!-- right back leg -->
+      <rect x="62" y="84" width="14" height="12" rx="6" fill="#46A302"/>
+      <!-- tail -->
+      <path d="M78,62 Q88,58 86,68" stroke="#46A302" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="section-title">Halo! Siapa namamu?</div>
+  <div class="section-sub">Masukkan namamu untuk memulai survei SUS</div>
+  <div class="input-wrap">
+    <label>Nama</label>
+    <input type="text" id="nameInput" placeholder="Tulis namamu di sini..." autocomplete="off" />
+  </div>
+  <div id="respondenList" style="margin-bottom:20px;"></div>
+  <button class="btn btn-green" id="btnStart" disabled onclick="startSurvey()">MULAI SURVEI</button>
 </div>
 
-<div class="container">
-
-  <!-- START SCREEN -->
-  <div class="screen active" id="start-screen">
-    <div class="start-card fade-in">
-      <div class="logo-ring">
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffc800"/>
-              <stop offset="50%" stop-color="#ff6b00"/>
-              <stop offset="100%" stop-color="#cc0000"/>
-            </linearGradient>
-          </defs>
-          <circle cx="60" cy="60" r="54" fill="none" stroke="url(#ring-grad)" stroke-width="4" stroke-dasharray="280 60" stroke-linecap="round"/>
-          <circle cx="60" cy="60" r="42" fill="rgba(26,79,200,0.15)" stroke="rgba(100,150,255,0.3)" stroke-width="1"/>
-          <polygon points="60,22 72,48 100,52 80,72 85,100 60,87 35,100 40,72 20,52 48,48" fill="none" stroke="#ffc800" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="60" cy="60" r="8" fill="#ffc800"/>
-        </svg>
-      </div>
-      <h1>Mobile Legends<br>Quiz</h1>
-      <div class="subtitle">Ultimate Challenge</div>
-      <div class="difficulty-badge">⚠ Ultra Hardcore Mode</div>
-
-      <div class="onetime-notice">
-        <span class="notice-icon">🔒</span>
-        <span><strong>Perhatian:</strong> Kuis ini hanya bisa dikerjakan <strong>satu kali</strong> per perangkat. Pastikan kondisi kamu siap sebelum mulai!</span>
-      </div>
-
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-num">10</div><div class="stat-label">Soal</div></div>
-        <div class="stat-box"><div class="stat-num">8s</div><div class="stat-label">Per Soal</div></div>
-        <div class="stat-box"><div class="stat-num">100</div><div class="stat-label">Skor Max</div></div>
-      </div>
-
-      <div class="name-section">
-        <label class="name-label" for="player-name-input">✦ Masukkan No Dana/Gopay ✦</label>
-        <input
-          class="name-input"
-          id="player-name-input"
-          type="text"
-          maxlength="20"
-          placeholder="No kamu untuk pemberian giveaway..."
-          oninput="onNameInput()"
-          onkeydown="if(event.key==='Enter') tryStart()"
-        >
-      </div>
-
-      <button class="btn-start" id="btn-start" onclick="startQuiz()" disabled>▶ MULAI KUIS</button>
-      <button class="btn-lb" onclick="showLeaderboardScreen()">🏆 LIHAT LEADERBOARD</button>
+<!-- SCREEN 2: QUESTION -->
+<div class="card screen" id="screen-question">
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progressText">Pertanyaan 1 / 10</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
   </div>
 
-  <!-- ALREADY PLAYED SCREEN -->
-  <div class="screen" id="done-screen">
-    <div class="done-card fade-in">
-      <div class="lock-icon">🔐</div>
-      <div class="lock-title">Sudah Selesai!</div>
-      <p class="lock-msg">
-        Kamu sudah mengerjakan kuis ini pada perangkat ini.<br>
-        Kuis hanya bisa dikerjakan <strong style="color:#ffc800">satu kali</strong> untuk menjaga kejujuran semua peserta.
-      </p>
-      <div class="lock-score-box">
-        <div class="lock-score-label">Skor Kamu</div>
-        <div class="lock-score-val" id="done-score">—</div>
-        <div class="lock-score-sub" id="done-correct">— / 10 Benar</div>
-      </div>
-      <button class="btn-lb" onclick="showLeaderboardScreen()">🏆 LIHAT LEADERBOARD</button>
-    </div>
+  <div class="streak-row" id="streakRow"></div>
+
+  <div class="q-number" id="qNumber">PERTANYAAN 1</div>
+  <div class="q-text" id="qText"></div>
+
+  <div class="scale-labels">
+    <span>Sangat Sulit</span>
+    <span>Sangat Mudah</span>
+  </div>
+  <div class="scale-buttons" id="scaleButtons">
+    <button class="scale-btn" data-val="1" onclick="selectAnswer(1)">1</button>
+    <button class="scale-btn" data-val="2" onclick="selectAnswer(2)">2</button>
+    <button class="scale-btn" data-val="3" onclick="selectAnswer(3)">3</button>
+    <button class="scale-btn" data-val="4" onclick="selectAnswer(4)">4</button>
+    <button class="scale-btn" data-val="5" onclick="selectAnswer(5)">5</button>
+    <button class="scale-btn" data-val="6" onclick="selectAnswer(6)">6</button>
+    <button class="scale-btn" data-val="7" onclick="selectAnswer(7)">7</button>
   </div>
 
-  <!-- QUIZ SCREEN -->
-  <div class="screen" id="quiz-screen">
-    <div class="player-name-display">Pemain: <strong id="quiz-player-name"></strong></div>
-    <div class="quiz-header">
-      <div class="q-counter">SOAL <span id="q-num">1</span>/10</div>
-      <div class="score-badge">SKOR <span id="score-display">0</span></div>
-    </div>
-    <div class="timer-wrap">
-      <div class="timer-text" id="timer-text">8</div>
-      <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
-    </div>
-    <div class="question-card">
-      <div class="q-role-tag" id="q-tag">HERO</div>
-      <div class="question-text" id="question-text"></div>
-    </div>
-    <div class="options-grid" id="options-grid"></div>
-    <div class="explanation-box" id="explanation-box"></div>
-    <div class="progress-dots" id="progress-dots"></div>
-  </div>
-
-  <!-- RESULT SCREEN -->
-  <div class="screen" id="result-screen">
-    <div class="result-card fade-in">
-      <div class="result-player-tag" id="result-player-tag"></div>
-      <div class="result-icon" id="result-icon"></div>
-      <div class="result-title" id="result-title"></div>
-      <div class="result-score-big" id="result-score"></div>
-      <div class="result-score-label">TOTAL SKOR</div>
-      <div class="result-stats">
-        <div class="r-stat"><div class="r-stat-num green" id="r-correct">0</div><div class="r-stat-label">Benar</div></div>
-        <div class="r-stat"><div class="r-stat-num red"   id="r-wrong">0</div><div class="r-stat-label">Salah</div></div>
-        <div class="r-stat"><div class="r-stat-num blue"  id="r-time">0</div><div class="r-stat-label">Timeout</div></div>
-      </div>
-      <div class="rank-display" id="rank-display"></div>
-
-      <div class="onetime-notice" style="margin-bottom:0;">
-        <span class="notice-icon">🔒</span>
-        <span>Kuis telah <strong>dikunci</strong>. Kamu tidak bisa mengerjakan ulang. Skor ini adalah hasil final kamu!</span>
-      </div>
-
-      <div class="section-divider"></div>
-
-      <div class="lb-section-title">🏆 PAPAN PERINGKAT</div>
-      <table class="lb-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Pemain</th>
-            <th class="col-correct">Benar</th>
-            <th>Skor</th>
-          </tr>
-        </thead>
-        <tbody id="result-lb-body"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- LEADERBOARD SCREEN -->
-  <div class="screen" id="lb-screen">
-    <div class="lb-card fade-in">
-      <div class="logo-ring-sm">
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="ring-grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffc800"/>
-              <stop offset="100%" stop-color="#ff6b00"/>
-            </linearGradient>
-          </defs>
-          <circle cx="60" cy="60" r="54" fill="none" stroke="url(#ring-grad2)" stroke-width="4" stroke-dasharray="280 60" stroke-linecap="round"/>
-          <circle cx="60" cy="60" r="42" fill="rgba(26,79,200,0.12)" stroke="rgba(100,150,255,0.3)" stroke-width="1"/>
-          <polygon points="60,22 72,48 100,52 80,72 85,100 60,87 35,100 40,72 20,52 48,48" fill="none" stroke="#ffc800" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="60" cy="60" r="8" fill="#ffc800"/>
-        </svg>
-      </div>
-      <h1 style="font-size:2.2rem; margin-bottom:4px;">Papan Peringkat</h1>
-      <div class="subtitle" style="margin-bottom: 32px;">Hall of Champions</div>
-
-      <table class="lb-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Pemain</th>
-            <th class="col-correct">Benar</th>
-            <th>Skor</th>
-          </tr>
-        </thead>
-        <tbody id="main-lb-body"></tbody>
-      </table>
-
-      <button class="btn-home" onclick="goBack()">← KEMBALI</button>
-
-      <!-- ADMIN RESET — hanya kamu yang tahu ini ada -->
-      <div class="admin-divider"></div>
-      <div class="admin-label">⚙ Admin</div>
-      <button class="btn-reset" onclick="adminReset()">🗑️ RESET SEMUA DATA LEADERBOARD</button>
-    </div>
-  </div>
-
+  <button class="btn btn-green" id="btnNext" disabled onclick="nextQuestion()">LANJUT</button>
 </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<!-- SCREEN 3: RESULT -->
+<div class="card screen" id="screen-result">
+  <div class="result-header">
+    <div class="result-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    </div>
+    <span class="result-title">Selesai!</span>
+  </div>
 
-  /* ============================================================
-     FIREBASE CONFIG
-  ============================================================ */
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-0WyPQ7gh0low4U7sIAlt1F39ErUSH_E",
-    authDomain: "kuis-23fc7.firebaseapp.com",
-    projectId: "kuis-23fc7",
-    storageBucket: "kuis-23fc7.firebasestorage.app",
-    messagingSenderId: "84219063542",
-    appId: "1:84219063542:web:296c7d1114d1cede00d0d7",
-    measurementId: "G-W3RX5W9LHD"
-  };
+  <div class="result-score">
+    <div class="score-label" id="scoreLabel"></div>
+  </div>
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  <hr class="divider">
 
-  /* ============================================================
-     QUESTIONS
-  ============================================================ */
-  const questions = [
-    {
-      tag: "RANDOM", tagClass: "random",
-      q: "Tebak Makanan Favorit Mimin?",
-      opts: ["Pizza","Rendang","Tempe Orek","Sate"],
-      ans: 1,
-      exp: "betul yang menjawab rendang"
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Angela adalah robot yang diciptakan oleh siapa?",
-      opts: ["steve, penemu terbesar Eruditio","Dr. Baker, penemu terbesar Eruditio","Kimmy, insinyur muda Eruditio","Xborg, rekan sesama robot"],
-      ans: 1,
-      exp: "Lunox memiliki Ultimate 'Yin-Yang Overturn' yang memungkinkannya menukar posisi dengan musuh yang ditarget, salah satu Ultimate paling unik di Mobile Legends."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Gelar kehormatan apa yang diberikan Kekaisaran Moniyan kepada Tigreal atas keberaniannya?",
-      opts: ["Warrior of Dawn","Champion of the Light","Guardian of Moniyan","Paladin of the Empire"],
-      ans: 0,
-      exp: " Kekaisaran Moniyan menganugerahi Tigreal gelar Warrior of Dawn sebagai pengakuan atas keberaniannya. Ia juga menjadi pilar Order of Knights yang namanya identik dengan keberanian dan ketangguhan."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Siapa yang pada akhirnya mengendalikan Hanzo di dalam lore Mobile Legends?",
-      opts: ["Dark Lord dari Abyss","Iblis dari Forsaken Wastes","Demon Pneuma","Alice"],
-      ans: 2,
-      exp: " Akakage pertama menciptakan Demon Pneuma sebagai lawan latihan menggunakan seni rahasia. Namun ia menjadi sadar dan memakan penciptanya. Meski disegel, sebagian kesadarannya lolos dan akhirnya menguasai ninja berbakat bernama Hanzo."
-    },
-    {
-      tag: "LORE", tagClass: "lore",
-      q: "Apa hubungan antara Lancelot dan Guinevere dalam lore Mobile Legends?",
-      opts: ["Lancelot dan Guinevere adalah sepasang kekasih","kakak beradik dari keluarga Baroque","rival dari keluarga bangsawan berbeda","Lancelot adalah pelayan setia keluarga Guinevere"],
-      ans: 1,
-      exp: "mereka adalah kakak-adik dari keluarga Baroque. Lancelot sangat menyayangi adiknya Guinevere meski sering dibuat pusing oleh eksperimen sihirnya."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Di mana Alucard belajar ilmu tempur setelah kehilangan orang tuanya?",
-      opts: ["Monastery of Light","Forsaken Wastes","Castle Gorge","Temple of Light"],
-      ans: 0,
-      exp: "Alucard diterima di Monastery of Light sebagai anak yatim prajurit dan belajar berbagai ilmu tempur di sana hingga usia 18 tahun."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Apa julukan Zilong di Mobile Legends?",
-      opts: ["The Dragon Knight","The Son of Dragon","The Dragon Warrior","The Dragonborn"],
-      ans: 1,
-      exp: "Zilong dikenal sebagai Son of Dragon, seorang pejuang yang lahir membawa darah naga dan ditakdirkan untuk memberantas kejahatan di Land of Dawn."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Dari keluarga bangsawan mana Lancelot berasal?",
-      opts: ["House Paxley","House Alvin","House Baroque","House Vance"],
-      ans: 2,
-      exp: "Lancelot adalah anggota keluarga bangsawan Baroque, keluarga yang terkenal dengan kemampuan anggar luar biasa dan kecantikan yang dianggap sebagai warisan genetik sempurna mereka."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Dari keluarga mana Gusion berasal?",
-      opts: ["House ligt","House Paxley","House Vance","Moniyan"],
-      ans: 1,
-      exp: "Gusion adalah putra keempat dari keluarga bangsawan Paxley, keluarga dengan kedudukan sihir tertinggi di Land of Dawn. Ia dikenal sebagai anak nakal dan berandalan di keluarganya."
-    },
-    {
-      tag: "HERO", tagClass: "hero",
-      q: "Hero mana yang BUKAN termasuk dalam kelompok 'Abyss' atau 'Demonic' dalam lore Mobile Legends, meskipun penampilannya terlihat seperti entitas jahat?",
-      opts: ["Dyrroth","Thamuz","Vexana","Baxia"],
-      ans: 3,
-      exp: "Baxia adalah Turtle Guardian dari Land of Dawn yang berasal dari Eastern Warrior lore, bukan dari Abyss atau Demonic faction. Meskipun tampilannya menyeramkan, Baxia adalah guardian pelindung."
+  <div class="summary-title">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+    </svg>
+    Ringkasan Jawaban &mdash; <span id="resultName"></span>
+  </div>
+  <div class="answers-grid" id="answersGrid"></div>
+
+  <hr class="divider">
+  <button class="btn btn-blue" onclick="restartSurvey()">MULAI ULANG</button>
+</div>
+
+<script>
+const questions = [
+  "Saya rasa saya akan sering menggunakan sistem ini",
+  "Saya merasa sistem ini terlalu kompleks",
+  "Saya rasa sistem ini mudah digunakan",
+  "Saya butuh bantuan teknisi untuk menggunakan sistem ini",
+  "Saya merasa berbagai fungsi dalam sistem ini terintegrasi dengan baik",
+  "Saya merasa terlalu banyak inkonsistensi dalam sistem ini",
+  "Saya rasa kebanyakan orang akan dengan cepat bisa menggunakan sistem ini",
+  "Saya merasa sistem ini sangat rumit untuk digunakan",
+  "Saya merasa sangat percaya diri menggunakan sistem ini",
+  "Saya perlu belajar banyak hal sebelum bisa menggunakan sistem ini"
+];
+
+let userName = '';
+let currentQ = 0;
+let answers = new Array(10).fill(null);
+let selectedNow = null;
+
+document.getElementById('nameInput').addEventListener('input', function() {
+  document.getElementById('btnStart').disabled = this.value.trim().length < 2;
+});
+document.getElementById('nameInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim().length >= 2) startSurvey();
+});
+
+function startSurvey() {
+  userName = document.getElementById('nameInput').value.trim();
+  if (!userName) return;
+  showScreen('screen-question');
+  buildStreakRow();
+  loadQuestion(0);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function buildStreakRow() {
+  const row = document.getElementById('streakRow');
+  row.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'streak-dot' + (i === 0 ? ' active' : '');
+    d.id = 'dot-' + i;
+    row.appendChild(d);
+  }
+}
+
+function updateStreak(index) {
+  for (let i = 0; i < 10; i++) {
+    const d = document.getElementById('dot-' + i);
+    if (i < index) d.className = 'streak-dot done';
+    else if (i === index) d.className = 'streak-dot active';
+    else d.className = 'streak-dot';
+  }
+}
+
+function loadQuestion(index) {
+  currentQ = index;
+  selectedNow = answers[index];
+  document.getElementById('qNumber').textContent = 'PERTANYAAN ' + (index + 1);
+  document.getElementById('qText').textContent = questions[index];
+  document.getElementById('progressText').textContent = 'Pertanyaan ' + (index + 1) + ' / 10';
+  const pct = Math.round((index / 10) * 100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  updateStreak(index);
+
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if (selectedNow !== null && parseInt(btn.dataset.val) === selectedNow) {
+      btn.classList.add('selected');
     }
-  ];
+  });
+  document.getElementById('btnNext').disabled = selectedNow === null;
+  document.getElementById('btnNext').textContent = index === 9 ? 'SELESAI' : 'LANJUT';
+}
 
-  /* ============================================================
-     LOCAL STORAGE KEYS (untuk lock per perangkat)
-  ============================================================ */
-  const LS_PLAYED_KEY = 'mlquiz_played_v2';
+function selectAnswer(val) {
+  selectedNow = val;
+  answers[currentQ] = val;
+  document.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === val);
+  });
+  document.getElementById('btnNext').disabled = false;
+}
 
-  function getPlayedRecord() {
-    try { return JSON.parse(localStorage.getItem(LS_PLAYED_KEY)); } catch(e) { return null; }
+function nextQuestion() {
+  if (selectedNow === null) return;
+  answers[currentQ] = selectedNow;
+  if (currentQ < 9) {
+    loadQuestion(currentQ + 1);
+  } else {
+    showResult();
   }
-  function markPlayed(entryId, score, correct) {
-    localStorage.setItem(LS_PLAYED_KEY, JSON.stringify({ played: true, entryId, score, correct }));
-  }
+}
 
-  /* ============================================================
-     FIREBASE LEADERBOARD
-  ============================================================ */
-  async function saveToFirebase(entry) {
-    try {
-      await setDoc(doc(db, 'leaderboard', entry.id), entry);
-    } catch(e) {
-      console.error('Firebase save error:', e);
-    }
-  }
+function calculateSUS() { return null; }
 
-  async function getLeaderboardFromFirebase() {
-    try {
-      const q = query(collection(db, 'leaderboard'), orderBy('score', 'desc'), orderBy('correct', 'desc'), limit(20));
-      const snap = await getDocs(q);
-      return snap.docs.map(d => d.data());
-    } catch(e) {
-      console.error('Firebase fetch error:', e);
-      return [];
-    }
-  }
+function gradeInfo(score) {
+  if (score >= 85) return { label: 'Excellent', color: '#58CC02', bg: '#E8FAD0', grade: 'A' };
+  if (score >= 71) return { label: 'Good', color: '#1CB0F6', bg: '#D0EDFD', grade: 'B' };
+  if (score >= 51) return { label: 'Cukup', color: '#FF9600', bg: '#FDEBD0', grade: 'C' };
+  if (score >= 35) return { label: 'Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'D' };
+  return { label: 'Sangat Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'F' };
+}
 
-  async function resetFirebaseLeaderboard() {
-    try {
-      const snap = await getDocs(collection(db, 'leaderboard'));
-      const deletes = snap.docs.map(d => deleteDoc(doc(db, 'leaderboard', d.id)));
-      await Promise.all(deletes);
-      return true;
-    } catch(e) {
-      console.error('Reset error:', e);
-      return false;
-    }
-  }
+function showResult() {
+  const score = calculateSUS();
+  const info = gradeInfo(score);
 
-  /* ============================================================
-     UI HELPERS
-  ============================================================ */
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
+  document.getElementById('scoreLabel').textContent = 'Terima kasih sudah mengisi survei!';
+  document.getElementById('scoreLabel').style.color = info.color;
+  document.getElementById('resultName').textContent = userName;
 
-  function showLoading(text = 'Memuat...') {
-    document.getElementById('loading-text').textContent = text;
-    document.getElementById('loading-overlay').classList.add('show');
-  }
-
-  function hideLoading() {
-    document.getElementById('loading-overlay').classList.remove('show');
-  }
-
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function buildLbRows(tbodyId, highlightId, data) {
-    const body = document.getElementById(tbodyId);
-    body.innerHTML = '';
-    if (!data || data.length === 0) {
-      body.innerHTML = '<tr><td colspan="4" class="lb-empty">Belum ada pemain yang tercatat.<br>Jadilah yang pertama! 🏅</td></tr>';
-      return;
-    }
-    const medals = ['🥇','🥈','🥉'];
-    data.forEach((entry, idx) => {
-      const rank = idx + 1;
-      const isMe = (entry.id === highlightId);
-      const tr   = document.createElement('tr');
-      tr.className = 'lb-row' + (isMe ? ' lb-row-highlight' : '');
-
-      let rankCell = rank <= 3
-        ? `<span class="rank-medal">${medals[rank-1]}</span>`
-        : `<span class="rank-num">${rank}</span>`;
-
-      let scoreClass = rank === 1 ? 'rank1' : rank === 2 ? 'rank2' : rank === 3 ? 'rank3' : '';
-
-      const d = new Date(entry.ts);
-      const dateStr = d.toLocaleDateString('id-ID', { day:'2-digit', month:'short' });
-
-      tr.innerHTML = `
-        <td>${rankCell}</td>
-        <td>
-          <span class="lb-player-name">${escHtml(entry.name)}</span>
-          ${isMe ? '<span class="lb-you-badge">KAMU</span>' : ''}
-          <br><span class="lb-date">${dateStr}</span>
-        </td>
-        <td class="col-correct"><span class="lb-correct-val">${entry.correct}/10</span></td>
-        <td><span class="lb-score-val ${scoreClass}">${entry.score}</span></td>
-      `;
-      body.appendChild(tr);
-    });
-  }
-
-  /* ============================================================
-     NAVIGATION
-  ============================================================ */
-  let prevScreen = 'start-screen';
-
-  window.goBack = function() {
-    showScreen(prevScreen);
-  };
-
-  window.showLeaderboardScreen = async function() {
-    const current = document.querySelector('.screen.active');
-    prevScreen = current ? current.id : 'start-screen';
-    showLoading('Memuat leaderboard...');
-    const data = await getLeaderboardFromFirebase();
-    hideLoading();
-    const rec = getPlayedRecord();
-    buildLbRows('main-lb-body', rec ? rec.entryId : null, data);
-    showScreen('lb-screen');
-  };
-
-  function showDoneScreen(rec) {
-    document.getElementById('done-score').textContent   = rec.score;
-    document.getElementById('done-correct').textContent = `${rec.correct} / 10 Benar`;
-    showScreen('done-screen');
-  }
-
-  /* ============================================================
-     ADMIN RESET
-  ============================================================ */
-  window.adminReset = async function() {
-    const pass = prompt('Masukkan password admin:');
-    if (pass !== 'admin123') { // GANTI PASSWORD INI!
-      alert('Password salah!');
-      return;
-    }
-    if (!confirm('Reset SEMUA data leaderboard Firebase? Ini tidak bisa dibatalkan!')) return;
-    showLoading('Mereset data...');
-    const ok = await resetFirebaseLeaderboard();
-    hideLoading();
-    if (ok) {
-      alert('✅ Leaderboard berhasil direset!');
-      buildLbRows('main-lb-body', null, []);
-    } else {
-      alert('❌ Gagal reset. Coba lagi.');
-    }
-  };
-
-  /* ============================================================
-     NAME INPUT
-  ============================================================ */
-  window.onNameInput = function() {
-    const val = document.getElementById('player-name-input').value.trim();
-    document.getElementById('btn-start').disabled = (val === '');
-  };
-
-  window.tryStart = function() {
-    const val = document.getElementById('player-name-input').value.trim();
-    if (val !== '') startQuiz();
-  };
-
-  /* ============================================================
-     INIT
-  ============================================================ */
-  window.addEventListener('DOMContentLoaded', () => {
-    const rec = getPlayedRecord();
-    if (rec && rec.played) showDoneScreen(rec);
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+  questions.forEach((q, i) => {
+    const item = document.createElement('div');
+    item.className = 'ans-item';
+    const short = q.length > 42 ? q.substring(0, 42) + '...' : q;
+    item.innerHTML =
+      '<div class="ans-num">' + (i + 1) + '</div>' +
+      '<div class="ans-text">' + short + '</div>' +
+      '<div class="ans-val">' + answers[i] + '</div>';
+    grid.appendChild(item);
   });
 
-  /* ============================================================
-     QUIZ STATE
-  ============================================================ */
-  let currentQ = 0, score = 0, correctCount = 0, wrongCount = 0, timeoutCount = 0;
-  let timerInterval = null, timeLeft = 8, answered = false;
-  let playerName = '', lastEntryId = null;
+const responden = JSON.parse(localStorage.getItem('sus_responden') || '[]');
+  responden.push({ nama: userName, tanggal: new Date().toLocaleDateString('id-ID'), jawaban: answers.slice() });
+  localStorage.setItem('sus_responden', JSON.stringify(responden));
 
-  /* ============================================================
-     QUIZ LOGIC
-  ============================================================ */
-  window.startQuiz = function() {
-    const rec = getPlayedRecord();
-    if (rec && rec.played) { showDoneScreen(rec); return; }
+  showScreen('screen-result');
+}
 
-    playerName = document.getElementById('player-name-input').value.trim();
-    if (!playerName) return;
+function lihatDetail(idx) {
+  const list = JSON.parse(localStorage.getItem('sus_responden') || '[]');
+  const r = list[idx];
+  if (!r || !r.jawaban) return;
 
-    currentQ = 0; score = 0; correctCount = 0; wrongCount = 0; timeoutCount = 0; lastEntryId = null;
-    document.getElementById('quiz-player-name').textContent = playerName;
-    showScreen('quiz-screen');
-    buildDots();
-    loadQuestion();
-  };
+  userName = r.nama;
+  answers = r.jawaban.slice();
 
-  function buildDots() {
-    const container = document.getElementById('progress-dots');
-    container.innerHTML = '';
-    for (let i = 0; i < 10; i++) {
-      const d = document.createElement('div');
-      d.className = 'dot' + (i === 0 ? ' active' : '');
-      d.id = 'dot-' + i;
-      container.appendChild(d);
-    }
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+  questions.forEach(function(q, i) {
+    const item = document.createElement('div');
+    item.className = 'ans-item';
+    const short = q.length > 42 ? q.substring(0, 42) + '...' : q;
+    item.innerHTML =
+      '<div class="ans-num">' + (i + 1) + '</div>' +
+      '<div class="ans-text">' + short + '</div>' +
+      '<div class="ans-val">' + r.jawaban[i] + '</div>';
+    grid.appendChild(item);
+  });
+
+  document.getElementById('resultName').textContent = r.nama + ' (' + r.tanggal + ')';
+  document.getElementById('scoreLabel').textContent = 'Terima kasih sudah mengisi survei!';
+  document.getElementById('scoreLabel').style.color = '#58CC02';
+
+  showScreen('screen-result');
+}
+
+function loadRespondenList() {
+  const list = JSON.parse(localStorage.getItem('sus_responden') || '[]');
+  const wrap = document.getElementById('respondenList');
+  if (list.length === 0) {
+    wrap.innerHTML = '';
+    return;
   }
+  let html = '<div style="font-family:Nunito,sans-serif;font-weight:900;font-size:14px;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Responden Sebelumnya</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+  list.slice().reverse().forEach(function(r, i) {
+    const idx = list.length - 1 - i;
+    html += '<div onclick="lihatDetail(' + idx + ')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:#F7F7F7;border-radius:12px;padding:10px 14px;transition:background .15s;" onmouseover="this.style.background=\'#EFEFEF\'" onmouseout="this.style.background=\'#F7F7F7\'">'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:14px;color:#3C3C3C;">' + r.nama + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-size:12px;color:#777;">' + r.tanggal + ' &rsaquo;</span>'
+      + '</div>';
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+}
 
-  function loadQuestion() {
-    answered = false;
-    const q = questions[currentQ];
-    document.getElementById('q-num').textContent         = currentQ + 1;
-    document.getElementById('score-display').textContent = score;
-    const tag = document.getElementById('q-tag');
-    tag.textContent = q.tag;
-    tag.className   = 'q-role-tag ' + q.tagClass;
-    document.getElementById('question-text').textContent = q.q;
+function clearData() {
+  localStorage.removeItem('sus_responden');
+  loadRespondenList();
+}
 
-    const grid = document.getElementById('options-grid');
-    grid.innerHTML = '';
-    ['A','B','C','D'].forEach((letter, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'opt-btn';
-      btn.innerHTML = `<span class="opt-letter">${letter}</span>${q.opts[i]}`;
-      btn.onclick = () => selectAnswer(i);
-      grid.appendChild(btn);
-    });
+function restartSurvey() {
+  answers = new Array(10).fill(null);
+  currentQ = 0;
+  selectedNow = null;
+  document.getElementById('nameInput').value = '';
+  document.getElementById('btnStart').disabled = true;
+  showScreen('screen-login');
+  loadRespondenList();
+}
 
-    const exp = document.getElementById('explanation-box');
-    exp.className = 'explanation-box';
-    exp.innerHTML = '';
-    updateDot(currentQ, 'active');
-    startTimer();
-  }
+loadRespondenList();
 
-  function startTimer() {
-    clearInterval(timerInterval);
-    timeLeft = 8;
-    updateTimerUI();
-    timerInterval = setInterval(() => {
-      timeLeft--;
-      updateTimerUI();
-      if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); }
-    }, 1000);
-  }
-
-  function updateTimerUI() {
-    const bar  = document.getElementById('timer-bar');
-    const text = document.getElementById('timer-text');
-    bar.style.width = ((timeLeft / 8) * 100) + '%';
-    text.textContent = timeLeft;
-    const isDanger = timeLeft <= 3;
-    bar.classList.toggle('danger', isDanger);
-    text.classList.toggle('danger', isDanger);
-    bar.classList.toggle('pulse-danger', isDanger);
-  }
-
-  function handleTimeout() {
-    if (answered) return;
-    answered = true;
-    timeoutCount++;
-    const q    = questions[currentQ];
-    const btns = document.querySelectorAll('.opt-btn');
-    btns.forEach(b => b.disabled = true);
-    btns[q.ans].classList.add('reveal');
-    updateDot(currentQ, 'done-wrong');
-    showExplanation(q, false, true);
-    scheduleNext();
-  }
-
-  function selectAnswer(idx) {
-    if (answered) return;
-    answered = true;
-    clearInterval(timerInterval);
-    const q    = questions[currentQ];
-    const btns = document.querySelectorAll('.opt-btn');
-    btns.forEach(b => b.disabled = true);
-    const timeBonus = Math.ceil(timeLeft / 8 * 5);
-    if (idx === q.ans) {
-      btns[idx].classList.add('correct');
-      const pts = 10 + timeBonus;
-      score += pts;
-      correctCount++;
-      updateDot(currentQ, 'done-correct');
-      showExplanation(q, true, false, pts);
-    } else {
-      btns[idx].classList.add('wrong');
-      btns[q.ans].classList.add('reveal');
-      wrongCount++;
-      updateDot(currentQ, 'done-wrong');
-      document.getElementById('question-text').classList.add('shake');
-      setTimeout(() => document.getElementById('question-text').classList.remove('shake'), 400);
-      showExplanation(q, false, false);
-    }
-    document.getElementById('score-display').textContent = score;
-    scheduleNext();
-  }
-
-  function showExplanation(q, correct, timeout, pts) {
-    const box = document.getElementById('explanation-box');
-    let prefix = timeout ? '⏰ <strong>Waktu Habis!</strong> ' : correct ? `✅ <strong>Benar! +${pts} poin.</strong> ` : '❌ <strong>Salah!</strong> ';
-    box.innerHTML = prefix + q.exp;
-    box.className = 'explanation-box show';
-  }
-
-  function updateDot(idx, status) {
-    const d = document.getElementById('dot-' + idx);
-    if (d) d.className = 'dot ' + status;
-  }
-
-  function scheduleNext() {
-    setTimeout(() => {
-      currentQ++;
-      if (currentQ >= 10) showResult();
-      else { updateDot(currentQ, 'active'); loadQuestion(); }
-    }, 2200);
-  }
-
-  /* ============================================================
-     RESULT + SAVE TO FIREBASE
-  ============================================================ */
-  async function showResult() {
-    showLoading('Menyimpan skor...');
-    const entry = {
-      id:      Date.now() + '_' + Math.random().toString(36).slice(2),
-      name:    playerName,
-      score:   score,
-      correct: correctCount,
-      ts:      Date.now()
-    };
-    lastEntryId = entry.id;
-    await saveToFirebase(entry);
-    markPlayed(entry.id, score, correctCount);
-
-    const lbData = await getLeaderboardFromFirebase();
-    hideLoading();
-
-    showScreen('result-screen');
-    document.getElementById('result-player-tag').innerHTML = `Hasil untuk: <strong>${escHtml(playerName)}</strong>`;
-    document.getElementById('r-correct').textContent = correctCount;
-    document.getElementById('r-wrong').textContent   = wrongCount;
-    document.getElementById('r-time').textContent    = timeoutCount;
-    document.getElementById('result-score').textContent = score;
-
-    let icon, title, titleClass, rank;
-    if (score >= 130) {
-      icon = '👑'; title = 'MYTHICAL GLORY'; titleClass = 'legend';
-      rank = '🏆 Luar biasa! Kamu adalah Dewa Mobile Legends sejati. Pengetahuanmu tentang ML tidak tertandingi!';
-    } else if (score >= 90) {
-      icon = '⚔️'; title = 'PRO PLAYER'; titleClass = 'pro';
-      rank = '💎 Impressive! Kamu memiliki pengetahuan ML yang sangat solid. Sedikit lagi bisa menyentuh puncak!';
-    } else if (score >= 50) {
-      icon = '🎮'; title = 'EPIC RANK'; titleClass = 'pro';
-      rank = '💪 Lumayan! Kamu tahu banyak hal tentang ML, tapi masih ada celah pengetahuan yang perlu diperdalam.';
-    } else {
-      icon = '🥉'; title = 'MASIH PEMULA'; titleClass = 'tryhard';
-      rank = '📚 Jangan menyerah! Kuis ini dirancang untuk menguji pengetahuan paling dalam. Terus belajar!';
-    }
-
-    document.getElementById('result-icon').textContent  = icon;
-    document.getElementById('result-title').textContent = title;
-    document.getElementById('result-title').className   = 'result-title ' + titleClass;
-    document.getElementById('rank-display').textContent = rank;
-
-    buildLbRows('result-lb-body', lastEntryId, lbData);
-  }
 </script>
 </body>
 </html>
