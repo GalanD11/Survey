@@ -258,6 +258,38 @@
   <button class="btn btn-green" id="btnNext" disabled onclick="nextQuestion()">LANJUT</button>
 </div>
 
+<!-- SCREEN SEQ -->
+<div class="card screen" id="screen-seq">
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Pertanyaan Tambahan</span>
+      <span>Hampir selesai!</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <div class="q-number">SEQ</div>
+  <div class="q-text">Secara keseluruhan, seberapa mudah tugas ini diselesaikan?</div>
+
+  <div class="scale-labels">
+    <span>Sangat Sulit</span>
+    <span>Sangat Mudah</span>
+  </div>
+  <div class="scale-buttons" id="seqButtons">
+    <button class="scale-btn" data-val="1" onclick="selectSEQ(1)">1</button>
+    <button class="scale-btn" data-val="2" onclick="selectSEQ(2)">2</button>
+    <button class="scale-btn" data-val="3" onclick="selectSEQ(3)">3</button>
+    <button class="scale-btn" data-val="4" onclick="selectSEQ(4)">4</button>
+    <button class="scale-btn" data-val="5" onclick="selectSEQ(5)">5</button>
+    <button class="scale-btn" data-val="6" onclick="selectSEQ(6)">6</button>
+    <button class="scale-btn" data-val="7" onclick="selectSEQ(7)">7</button>
+  </div>
+
+  <button class="btn btn-green" id="btnSeqNext" disabled onclick="submitSEQ()">LIHAT HASIL</button>
+</div>
+  
 <!-- SCREEN 3: RESULT -->
 <div class="card screen" id="screen-result">
   <div class="result-header">
@@ -331,6 +363,7 @@ let userName = '';
 let currentQ = 0;
 let answers = new Array(10).fill(null);
 let selectedNow = null;
+let seqAnswer = null;
 
 document.getElementById('nameInput').addEventListener('input', function() {
   document.getElementById('btnStart').disabled = this.value.trim().length < 2;
@@ -410,10 +443,26 @@ function nextQuestion() {
   if (currentQ < 9) {
     loadQuestion(currentQ + 1);
   } else {
-    showResult();
+    seqAnswer = null;
+    document.querySelectorAll('#seqButtons .scale-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('btnSeqNext').disabled = true;
+    showScreen('screen-seq');
   }
 }
 
+function selectSEQ(val) {
+  seqAnswer = val;
+  document.querySelectorAll('#seqButtons .scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === val);
+  });
+  document.getElementById('btnSeqNext').disabled = false;
+}
+
+function submitSEQ() {
+  if (seqAnswer === null) return;
+  showResult();
+}
+  
 async function showResult() {
   document.getElementById('resultName').textContent = userName;
   document.getElementById('scoreLabel').textContent = 'Terima kasih sudah mengisi survei!';
@@ -421,6 +470,13 @@ async function showResult() {
 
   const grid = document.getElementById('answersGrid');
   grid.innerHTML = '';
+  const seqItem = document.createElement('div');
+  seqItem.className = 'ans-item';
+  seqItem.innerHTML =
+    '<div class="ans-num" style="background:#1CB0F6;">SEQ</div>' +
+    '<div class="ans-text">Seberapa mudah tugas ini diselesaikan?</div>' +
+    '<div class="ans-val">' + seqAnswer + '</div>';
+  grid.appendChild(seqItem);
   questions.forEach(function(q, i) {
     const item = document.createElement('div');
     item.className = 'ans-item';
@@ -438,6 +494,7 @@ async function showResult() {
     await window._addDoc(window._collection(window._db, 'responden'), {
       nama: userName,
       jawaban: answers.slice(),
+      seq: seqAnswer,
       tanggal: new Date().toLocaleDateString('id-ID'),
       timestamp: Date.now()
     });
@@ -453,6 +510,15 @@ window.lihatDetail = function(data) {
 
   const grid = document.getElementById('answersGrid');
   grid.innerHTML = '';
+  if (data.seq) {
+    const seqItem = document.createElement('div');
+    seqItem.className = 'ans-item';
+    seqItem.innerHTML =
+      '<div class="ans-num" style="background:#1CB0F6;">SEQ</div>' +
+      '<div class="ans-text">Seberapa mudah tugas ini diselesaikan?</div>' +
+      '<div class="ans-val">' + data.seq + '</div>';
+    grid.appendChild(seqItem);
+  }
   questions.forEach(function(q, i) {
     const item = document.createElement('div');
     item.className = 'ans-item';
