@@ -303,6 +303,15 @@
 
   <div class="score-label" id="scoreLabel"></div>
 
+  <div style="text-align:center;margin-bottom:20px;">
+    <div id="susNumber" style="font-family:Nunito,sans-serif;font-weight:900;font-size:64px;line-height:1;"></div>
+    <div style="font-size:12px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">SUS Score</div>
+    <div style="background:#E5E5E5;border-radius:99px;height:14px;overflow:hidden;margin-bottom:10px;">
+      <div id="susBar" style="height:100%;border-radius:99px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);"></div>
+    </div>
+    <div id="susGrade" style="display:inline-block;padding:5px 18px;border-radius:99px;font-family:Nunito,sans-serif;font-weight:900;font-size:13px;letter-spacing:.5px;"></div>
+  </div>
+
   <hr class="divider">
 
   <div class="summary-title">
@@ -462,11 +471,52 @@ function submitSEQ() {
   if (seqAnswer === null) return;
   showResult();
 }
-  
+ 
+function calculateSUS() {
+  let total = 0;
+  for (let i = 0; i < 10; i++) {
+    const raw = answers[i];
+    if (i % 2 === 0) {
+      total += (raw - 1);
+    } else {
+      total += (raw - 1);
+    }
+  }
+  return Math.round((total / 60) * 100);
+}
+
+function gradeInfo(score) {
+  if (score >= 85) return { label: 'Excellent', color: '#58CC02', bg: '#E8FAD0', grade: 'A' };
+  if (score >= 71) return { label: 'Good', color: '#1CB0F6', bg: '#D0EDFD', grade: 'B' };
+  if (score >= 51) return { label: 'Cukup', color: '#FF9600', bg: '#FDEBD0', grade: 'C' };
+  if (score >= 35) return { label: 'Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'D' };
+  return { label: 'Sangat Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'F' };
+}
+
+function gradeInfo(score) {
+  if (score >= 85) return { label: 'Excellent', color: '#58CC02', bg: '#E8FAD0', grade: 'A' };
+  if (score >= 71) return { label: 'Good', color: '#1CB0F6', bg: '#D0EDFD', grade: 'B' };
+  if (score >= 51) return { label: 'Cukup', color: '#FF9600', bg: '#FDEBD0', grade: 'C' };
+  if (score >= 35) return { label: 'Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'D' };
+  return { label: 'Sangat Buruk', color: '#FF4B4B', bg: '#FFD6D6', grade: 'F' };
+}
+
 async function showResult() {
   document.getElementById('resultName').textContent = userName;
   document.getElementById('scoreLabel').textContent = 'Terima kasih sudah mengisi survei!';
   document.getElementById('scoreLabel').style.color = '#58CC02';
+
+  const score = calculateSUS();
+  const info = gradeInfo(score);
+  document.getElementById('susNumber').textContent = score;
+  document.getElementById('susNumber').style.color = info.color;
+  document.getElementById('susGrade').textContent = 'GRADE ' + info.grade + ' — ' + info.label;
+  document.getElementById('susGrade').style.background = info.bg;
+  document.getElementById('susGrade').style.color = info.color;
+  setTimeout(function() {
+    document.getElementById('susBar').style.width = score + '%';
+    document.getElementById('susBar').style.background = info.color;
+  }, 200);
 
   const grid = document.getElementById('answersGrid');
   grid.innerHTML = '';
@@ -495,6 +545,7 @@ async function showResult() {
       nama: userName,
       jawaban: answers.slice(),
       seq: seqAnswer,
+      susScore: calculateSUS(),
       tanggal: new Date().toLocaleDateString('id-ID'),
       timestamp: Date.now()
     });
@@ -507,6 +558,19 @@ window.lihatDetail = function(data) {
   document.getElementById('resultName').textContent = data.nama + ' (' + data.tanggal + ')';
   document.getElementById('scoreLabel').textContent = 'Terima kasih sudah mengisi survei!';
   document.getElementById('scoreLabel').style.color = '#58CC02';
+
+  if (data.susScore !== undefined) {
+    const info = gradeInfo(data.susScore);
+    document.getElementById('susNumber').textContent = data.susScore;
+    document.getElementById('susNumber').style.color = info.color;
+    document.getElementById('susGrade').textContent = 'GRADE ' + info.grade + ' — ' + info.label;
+    document.getElementById('susGrade').style.background = info.bg;
+    document.getElementById('susGrade').style.color = info.color;
+    setTimeout(function() {
+      document.getElementById('susBar').style.width = data.susScore + '%';
+      document.getElementById('susBar').style.background = info.color;
+    }, 200);
+  }
 
   const grid = document.getElementById('answersGrid');
   grid.innerHTML = '';
