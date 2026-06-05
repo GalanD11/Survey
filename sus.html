@@ -418,7 +418,7 @@ function loadQuestion(index) {
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('progressFill').style.width = pct + '%';
   updateStreak(index);
-  document.querySelectorAll('.scale-btn').forEach(btn => {
+  document.querySelectorAll('#screen-question .scale-btn').forEach(btn => {
     btn.classList.remove('selected');
     if (selectedNow !== null && parseInt(btn.dataset.val) === selectedNow) {
       btn.classList.add('selected');
@@ -431,7 +431,7 @@ function loadQuestion(index) {
 function selectAnswer(val) {
   selectedNow = val;
   answers[currentQ] = val;
-  document.querySelectorAll('.scale-btn').forEach(btn => {
+  document.querySelectorAll('#screen-question .scale-btn').forEach(btn => {
     btn.classList.toggle('selected', parseInt(btn.dataset.val) === val);
   });
   document.getElementById('btnNext').disabled = false;
